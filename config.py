@@ -1,0 +1,3 @@
+RTMP_URL = ""
+RTMP_KEY = ""
+BOT_TOKEN=""
