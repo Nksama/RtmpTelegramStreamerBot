@@ -20,7 +20,7 @@ def play(_,m):
     m.reply("Downloading......")
     x = m.reply_to_message.download()
     m.reply("Playing....")
-    os.system(fr"""ffmpeg -re -i "{x}" \
+    os.system(fr"""ffmpeg -re -i '{x}' \
 -c:v libx264 -preset fast -b:v 1500k -maxrate 1500k -bufsize 3000k \
 -pix_fmt yuv420p -g 25 -keyint_min 25 \
 -c:a aac -b:a 96k -ac 2 -ar 44100 \
@@ -32,12 +32,43 @@ def play(_,m):
     m.reply("Downloading......")
     x = m.reply_to_message.download()
     m.reply("Playing....")
-    os.system(fr"""ffmpeg -re -i "{x}" \
+    os.system(fr"""ffmpeg -re -i '{x}' \
 -c:v libx264 -preset fast -b:v 1500k -maxrate 1500k -bufsize 3000k \
 -pix_fmt yuv420p -g 25 -keyint_min 25 \
 -c:a aac -b:a 96k -ac 2 -ar 44100 \
 -f flv {outputurl}
 """)
+
+@bot.on_message(filters.command("uplay"))
+def uplay(_,m):
+
+    url = m.text.split(" ")[1]
+    m.reply("Playing....")
+
+    # Stop the previous FFmpeg process if it's running
+
+    ffmpeg_process = os.system(fr"""ffmpeg -re -i '{url}' \
+    -c:v libx264 -preset fast -b:v 1500k -maxrate 1500k -bufsize 3000k \
+    -pix_fmt yuv420p -g 25 -keyint_min 25 \
+    -c:a aac -b:a 96k -ac 2 -ar 44100 \
+    -f flv {outputurl}""")
+
+@bot.on_message(filters.command("vuplay"))
+def vuplay(_,m):
+
+
+    url = m.text.split(" ")[1]
+    m.reply("Playing....")
+
+
+    ffmpeg_process = os.system(fr"""ffmpeg -re -i '{url}' \
+    -c:v libx264 -preset fast -b:v 1500k -maxrate 1500k -bufsize 3000k \
+    -pix_fmt yuv420p -g 25 -keyint_min 25 \
+    -c:a aac -b:a 96k -ac 2 -ar 44100 \
+    -f flv {outputurl}""")
+
+
+
 
 
 
