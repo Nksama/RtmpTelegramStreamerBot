@@ -63,6 +63,8 @@ def play(_, m):
     ]
 
     ffmpeg_process = subprocess.Popen(ffmpeg_command)
+    ffmpeg_process.wait()
+    os.remove(x) 
 
 
 @bot.on_message(filters.command("uplay"))
@@ -81,6 +83,8 @@ def uplay(_, m):
     ]
 
     ffmpeg_process = subprocess.Popen(ffmpeg_command)
+    ffmpeg_process.wait()
+    os.remove(x) 
 
 @bot.on_message(filters.command("stop"))
 def stop(_, m):
@@ -111,7 +115,12 @@ def ytplay(_,m):
     ]
 
     ffmpeg_process = subprocess.Popen(ffmpeg_command)
+    ffmpeg_process.wait()
+    os.remove(x) 
     
+
+
+
 
 
 bot.run()
