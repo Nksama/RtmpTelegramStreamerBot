@@ -56,7 +56,7 @@ def vplay(_, m):
 @bot.on_message(filters.command("uplay"))
 def uplay(_, m):
     global ffmpeg_process
-    url = m.text.split(" ")[1]
+    url = m.text.replace("/uplay " , "")
     m.reply("Playing....")
     if ffmpeg_process:
         ffmpeg_process.terminate()
