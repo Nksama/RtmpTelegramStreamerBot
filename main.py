@@ -26,11 +26,11 @@ def play(_, m):
     if ffmpeg_process:
         ffmpeg_process.terminate()
     ffmpeg_command = [
-        "ffmpeg", "-re", "-i", "x",
+        "ffmpeg", "-re", "-i", x,
         "-c:v", "libx264", "-preset", "fast", "-b:v", "1500k", "-maxrate", "1500k", "-bufsize", "3000k",
         "-pix_fmt", "yuv420p", "-g", "25", "-keyint_min", "25",
         "-c:a", "aac", "-b:a", "96k", "-ac", "2", "-ar", "44100",
-        "-f", "flv", "outputurl"
+        "-f", "flv", outputurl
     ]
 
     ffmpeg_process = subprocess.Popen(ffmpeg_command)
@@ -44,11 +44,11 @@ def uplay(_, m):
     if ffmpeg_process:
         ffmpeg_process.terminate()
     ffmpeg_command = [
-        "ffmpeg", "-re", "-i", "x",
+        "ffmpeg", "-re", "-i", url,
         "-c:v", "libx264", "-preset", "fast", "-b:v", "1500k", "-maxrate", "1500k", "-bufsize", "3000k",
         "-pix_fmt", "yuv420p", "-g", "25", "-keyint_min", "25",
         "-c:a", "aac", "-b:a", "96k", "-ac", "2", "-ar", "44100",
-        "-f", "flv", "outputurl"
+        "-f", "flv", outputurl
     ]
 
     ffmpeg_process = subprocess.Popen(ffmpeg_command)
