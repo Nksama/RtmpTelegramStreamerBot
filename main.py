@@ -35,23 +35,6 @@ def play(_, m):
     ]
     ffmpeg_process = subprocess.Popen(ffmpeg_command)
 
-@bot.on_message(filters.command("vplay"))
-def vplay(_, m):
-    global ffmpeg_process
-    m.reply("Downloading......")
-    x = m.reply_to_message.download()
-    m.reply("Playing....")
-    if ffmpeg_process:
-        ffmpeg_process.terminate()
-    ffmpeg_command = [
-        "ffmpeg", "-re", "-i", x,
-        "-c:v", "libx264", "-preset", "fast", "-b:v", "2500k", "-maxrate", "2500k", "-bufsize", "5000k",
-        "-pix_fmt", "yuv420p", "-g", "50", "-keyint_min", "50",
-        "-c:a", "aac", "-b:a", "128k", "-ac", "2", "-ar", "44100",
-        "-profile:v", "main",
-        "-f", "flv", outputurl
-    ]
-    ffmpeg_process = subprocess.Popen(ffmpeg_command)
 
 @bot.on_message(filters.command("uplay"))
 def uplay(_, m):
