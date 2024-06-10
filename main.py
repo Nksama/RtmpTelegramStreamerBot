@@ -2,6 +2,8 @@ from pyrogram import Client , filters
 import os
 import config
 import subprocess
+import yt_dlp
+
 
 bot = Client(
     "rtmpstreamer" ,
@@ -12,6 +14,33 @@ bot = Client(
 
 outputurl = config.RTMP_URL + config.RTMP_KEY
 ffmpeg_process = None
+
+
+ydl_opts = {
+    'format': 'bestaudio/best',
+    'postprocessors': [{
+        'key': 'FFmpegExtractAudio',
+        'preferredcodec': 'mp3',
+        'preferredquality': '320',
+    }],
+    'outtmpl': '%(title)s.%(ext)s',
+}
+
+
+def download_video(video_url):
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        info = ydl.extract_info(video_url)
+        
+        ydl.download([info['webpage_url']])
+        filename = ydl.prepare_filename(info)
+
+      # Print the filename
+    try:
+        return filename.replace("webm" , "mp3")
+    except Exception as e:
+        return filename
+    
+
 
 @bot.on_message(filters.command("start"))
 def hello(_, m):
@@ -62,6 +91,27 @@ def stop(_, m):
         m.reply("Stopped streaming.")
     else:
         m.reply("No active playback to stop.")
+
+
+@bot.on_message(filters.command("ytplay"))
+def ytplay(_,m):
+    global ffmpeg_process
+    url = m.text.replace("/ytplay " , "")
+    m.reply("DOWNLOADING.....")
+    x = download_video(url)
+    m.reply("Playing....")
+    if ffmpeg_process:
+        ffmpeg_process.terminate()
+    ffmpeg_command = [
+        "ffmpeg", "-re", "-i", x,
+        "-c:v", "libx264", "-preset", "fast", "-b:v", "1500k", "-maxrate", "1500k", "-bufsize", "3000k",
+        "-pix_fmt", "yuv420p", "-g", "25", "-keyint_min", "25",
+        "-c:a", "aac", "-b:a", "96k", "-ac", "2", "-ar", "44100",
+        "-f", "flv", outputurl
+    ]
+
+    ffmpeg_process = subprocess.Popen(ffmpeg_command)
+    
 
 
 bot.run()
